@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Raketta – Infografia Interactiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --g:    #2d6a3f;
+    --gd:   #1a4028;
+    --gl:   #e8f5ec;
+    --y:    #c8a84b;
+    --yl:   #f5e9c8;
+    --w:    #ffffff;
+    --txt:  #1a1a1a;
+    --mid:  #888;
+    --r:    10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gd);
+    color: var(--w);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ─────────────────────────────── */
+  .inf-header {
+    text-align: center;
+    padding: 2.5rem 1.5rem 1.5rem;
+    position: relative;
+  }
+  .inf-header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--y);
+    margin: 1rem auto 0;
+    border-radius: 2px;
+  }
+  .inf-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--y);
+    margin-bottom: 0.6rem;
+  }
+  .inf-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    line-height: 1.2;
+    color: var(--w);
+  }
+  .inf-header p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.5rem;
+  }
+
+  /* ── MAIN LAYOUT ─────────────────────────── */
+  .inf-body {
+    padding: 0 1rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  /* ── STAT ROW ────────────────────────────── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--r);
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: default;
+    transition: background 0.25s, transform 0.2s;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.5s forwards;
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.1s; }
+  .stat-card:nth-child(2) { animation-delay: 0.2s; }
+  .stat-card:nth-child(3) { animation-delay: 0.3s; }
+  .stat-card:nth-child(4) { animation-delay: 0.4s; }
+  .stat-card:hover {
+    background: rgba(200,168,75,0.15);
+    border-color: var(--y);
+    transform: translateY(-3px);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--y);
+    line-height: 1;
+    display: block;
+  }
+  .stat-lbl {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.3rem;
+    line-height: 1.3;
+  }
+
+  /* ── SECTION TITLE ───────────────────────── */
+  .sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--y);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sec-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── SERVICE GRID ─────────────────────────── */
+  .serv-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .serv-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--r);
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp 0.5s forwards;
+  }
+  .serv-card:nth-child(1) { animation-delay: 0.1s; }
+  .serv-card:nth-child(2) { animation-delay: 0.2s; }
+  .serv-card:nth-child(3) { animation-delay: 0.3s; }
+  .serv-card:nth-child(4) { animation-delay: 0.4s; }
+  .serv-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--y);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+  .serv-card:hover::before,
+  .serv-card.open::before { transform: scaleY(1); }
+  .serv-card:hover,
+  .serv-card.open {
+    background: rgba(255,255,255,0.11);
+    border-color: rgba(200,168,75,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  }
+  .serv-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .serv-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .serv-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--w);
+  }
+  .serv-price {
+    font-size: 0.78rem;
+    color: var(--y);
+    font-weight: 600;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .serv-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.3s;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+  }
+  .serv-card.open .serv-detail {
+    max-height: 100px;
+    margin-top: 0.6rem;
+  }
+  .serv-hint {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.3);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* ── VALUES ROW ───────────────────────────── */
+  .val-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .val-card {
+    background: linear-gradient(135deg, rgba(45,106,63,0.4), rgba(26,64,40,0.6));
+    border: 1px solid rgba(45,106,63,0.5);
+    border-radius: var(--r);
+    padding: 1rem 0.9rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: scale(0.93);
+    animation: popIn 0.45s forwards;
+  }
+  .val-card:nth-child(1) { animation-delay: 0.05s; }
+  .val-card:nth-child(2) { animation-delay: 0.15s; }
+  .val-card:nth-child(3) { animation-delay: 0.25s; }
+  .val-card:hover {
+    background: linear-gradient(135deg, rgba(45,106,63,0.7), rgba(26,64,40,0.9));
+    border-color: var(--g);
+    transform: scale(1.03);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+  }
+  .val-icon { font-size: 1.6rem; margin-bottom: 0.4rem; display: block; }
+  .val-name {
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--w);
+    margin-bottom: 0.3rem;
+  }
+  .val-desc {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+  }
+
+  /* ── HOW IT WORKS FLOW ───────────────────── */
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+  }
+  .flow-row::-webkit-scrollbar { height: 4px; }
+  .flow-row::-webkit-scrollbar-thumb { background: var(--y); border-radius: 2px; }
+  .flow-step {
+    flex: 1;
+    min-width: 130px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 1rem 0.8rem;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.5s forwards;
+  }
+  .flow-step:first-child { border-radius: var(--r) 0 0 var(--r); }
+  .flow-step:last-child  { border-radius: 0 var(--r) var(--r) 0; }
+  .flow-step:not(:last-child)::after {
+    content: '›';
+    position: absolute;
+    right: -11px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+    color: var(--y);
+    z-index: 2;
+    line-height: 1;
+  }
+  .flow-step:nth-child(1) { animation-delay: 0.05s; }
+  .flow-step:nth-child(2) { animation-delay: 0.15s; }
+  .flow-step:nth-child(3) { animation-delay: 0.25s; }
+  .flow-step:nth-child(4) { animation-delay: 0.35s; }
+  .flow-step:nth-child(5) { animation-delay: 0.45s; }
+  .flow-step:hover {
+    background: rgba(200,168,75,0.15);
+    transform: translateY(-3px);
+  }
+  .flow-step.active {
+    background: rgba(200,168,75,0.2);
+    border-color: rgba(200,168,75,0.5);
+  }
+  .flow-num {
+    display: inline-flex;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--y);
+    color: var(--gd);
+    font-weight: 700;
+    font-size: 0.8rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+  }
+  .flow-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--w);
+    line-height: 1.3;
+  }
+  .flow-sub {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.45);
+    margin-top: 0.3rem;
+    line-height: 1.3;
+  }
+
+  /* ── TOOLTIP PANEL ───────────────────────── */
+  .tooltip-panel {
+    background: rgba(200,168,75,0.12);
+    border: 1px solid rgba(200,168,75,0.35);
+    border-radius: var(--r);
+    padding: 0.9rem 1.2rem;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.8);
+    min-height: 52px;
+    transition: all 0.3s;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .tooltip-panel .tip-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* ── SCHEDULE TABLE ───────────────────────── */
+  .sched-wrap {
+    border-radius: var(--r);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .sched-row {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    gap: 1rem;
+    transition: background 0.2s;
+    cursor: default;
+    font-size: 0.82rem;
+    opacity: 0;
+    animation: fadeUp 0.4s forwards;
+  }
+  .sched-row:nth-child(odd)  { background: rgba(255,255,255,0.04); }
+  .sched-row:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .sched-row:hover { background: rgba(200,168,75,0.1); }
+  .sched-row:nth-child(1) { animation-delay: 0.05s; }
+  .sched-row:nth-child(2) { animation-delay: 0.1s; }
+  .sched-row:nth-child(3) { animation-delay: 0.15s; }
+  .sched-row:nth-child(4) { animation-delay: 0.2s; }
+  .sched-day {
+    font-weight: 600;
+    color: var(--y);
+    min-width: 80px;
+    font-size: 0.8rem;
+  }
+  .sched-time { color: rgba(255,255,255,0.7); flex: 1; }
+  .sched-badge {
+    background: rgba(45,106,63,0.4);
+    border: 1px solid rgba(45,106,63,0.6);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.68rem;
+    color: #8dd4a0;
+    font-weight: 600;
+  }
+
+  /* ── CTA FOOTER ───────────────────────────── */
+  .inf-cta {
+    background: linear-gradient(135deg, var(--y) 0%, #a8872e 100%);
+    border-radius: var(--r);
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    opacity: 0;
+    animation: fadeUp 0.5s 0.3s forwards;
+  }
+  .inf-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(200,168,75,0.35);
+  }
+  .inf-cta-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gd);
+    font-weight: 700;
+  }
+  .inf-cta-sub {
+    font-size: 0.75rem;
+    color: rgba(26,64,40,0.7);
+    margin-top: 0.1rem;
+  }
+  .inf-cta-arrow {
+    font-size: 1.6rem;
+    color: var(--gd);
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .inf-cta:hover .inf-cta-arrow { transform: translateX(4px); }
+
+  /* ── PROGRESS BARS ───────────────────────── */
+  .prog-row { display: flex; flex-direction: column; gap: 0.6rem; }
+  .prog-item { display: flex; flex-direction: column; gap: 0.25rem; }
+  .prog-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+  }
+  .prog-name { color: rgba(255,255,255,0.75); }
+  .prog-pct  { color: var(--y); font-weight: 600; }
+  .prog-bar  {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--g), var(--y));
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s ease 0.3s;
+  }
+
+  /* ── BOTTOM 2-COL ─────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  /* ── ANIMATIONS ───────────────────────────── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes popIn {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* ── RESPONSIVE ───────────────────────────── */
+  @media (max-width: 560px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .serv-grid { grid-template-columns: 1fr; }
+    .val-row   { grid-template-columns: 1fr; }
+    .two-col   { grid-template-columns: 1fr; }
+    .flow-step { min-width: 110px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="inf-header">
+  <p class="inf-eyebrow">Infografia interactiva · Raketta</p>
+  <h1>Tot sobre el nostre club</h1>
+  <p>Clica les targetes per descobrir més informació</p>
+</div>
+
+<div class="inf-body">
+
+  <!-- STATS -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <span class="stat-num">+300</span>
+      <div class="stat-lbl">Socis actius</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">9</span>
+      <div class="stat-lbl">Pistes disponibles</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">12</span>
+      <div class="stat-lbl">Anys d'experiència</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">4</span>
+      <div class="stat-lbl">Entrenadors titulats</div>
+    </div>
+  </div>
+
+  <!-- SERVEIS -->
+  <div>
+    <p class="sec-title">🎾 Serveis</p>
+    <div class="serv-grid" id="servGrid">
+      <div class="serv-card" onclick="toggleServ(this)">
+        <div class="serv-head">
+          <span class="serv-icon">🎾</span>
+          <span class="serv-name">Classes individuals</span>
+          <span class="serv-price">Des de 30 €/h</span>
+        </div>
+        <div class="serv-detail">Entrenament 1 a 1 amb un entrenador titulat. Adaptat al teu nivell: principiant, intermedi o avançat. Horaris flexibles de dilluns a diumenge.</div>
+        <div class="serv-hint">↓ Clica per ampliar</div>
+      </div>
+      <div class="serv-card" onclick="toggleServ(this)">
+        <div class="serv-head">
+          <span class="serv-icon">👥</span>
+          <span class="serv-name">Classes en grup</span>
+          <span class="serv-price">Des de 12 €/sessió</span>
+        </div>
+        <div class="serv-detail">Grups de 4 a 6 persones. Ambient dinàmic, progressió contínua i molt de joc en equip. Ideal per a tots els nivells.</div>
+        <div class="serv-hint">↓ Clica per ampliar</div>
+      </div>
+      <div class="serv-card" onclick="toggleServ(this)">
+        <div class="serv-head">
+          <span class="serv-icon">🏆</span>
+          <span class="serv-name">Tornejos interns</span>
+          <span class="serv-price">Inclòs en la quota</span>
+        </div>
+        <div class="serv-detail">Competicions mensuals per a socis de tots els nivells amb classificació pròpia. Trofeus i premis especials per als guanyadors.</div>
+        <div class="serv-hint">↓ Clica per ampliar</div>
+      </div>
+      <div class="serv-card" onclick="toggleServ(this)">
+        <div class="serv-head">
+          <span class="serv-icon">🏟️</span>
+          <span class="serv-name">Lloguer de pistes</span>
+          <span class="serv-price">Des de 8 €/hora</span>
+        </div>
+        <div class="serv-detail">Reserva en línia o per telèfon. Disponible de 8:00 a 22:00. Il·luminació LED nocturna inclosa. Sense temps mínim de reserva.</div>
+        <div class="serv-hint">↓ Clica per ampliar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COM FUNCIONA -->
+  <div>
+    <p class="sec-title">⚙️ Com funcionar-se soci</p>
+    <div class="flow-row" id="flowRow">
+      <div class="flow-step" onclick="setFlow(this, 0)">
+        <div class="flow-num">1</div>
+        <div class="flow-label">Contacta'ns</div>
+        <div class="flow-sub">Tel · Email · Web</div>
+      </div>
+      <div class="flow-step" onclick="setFlow(this, 1)">
+        <div class="flow-num">2</div>
+        <div class="flow-label">Prova gratuïta</div>
+        <div class="flow-sub">1 sessió sense compromís</div>
+      </div>
+      <div class="flow-step" onclick="setFlow(this, 2)">
+        <div class="flow-num">3</div>
+        <div class="flow-label">Tria el pla</div>
+        <div class="flow-sub">Bàsic · Estàndard · Premium</div>
+      </div>
+      <div class="flow-step" onclick="setFlow(this, 3)">
+        <div class="flow-num">4</div>
+        <div class="flow-label">Alta com a soci</div>
+        <div class="flow-sub">Alta en 24h</div>
+      </div>
+      <div class="flow-step" onclick="setFlow(this, 4)">
+        <div class="flow-num">5</div>
+        <div class="flow-label">Comença a jugar</div>
+        <div class="flow-sub">Reserva la teva pista</div>
+      </div>
+    </div>
+    <div class="tooltip-panel" id="flowTip" style="margin-top:0.6rem;">
+      <span class="tip-icon">👆</span>
+      <span>Clica qualsevol pas per veure més detalls sobre el procés d'alta.</span>
+    </div>
+  </div>
+
+  <!-- VALORS + HORARI -->
+  <div class="two-col">
+
+    <!-- VALORS -->
+    <div>
+      <p class="sec-title">💚 Valors</p>
+      <div class="val-row">
+        <div class="val-card">
+          <span class="val-icon">🌱</span>
+          <div class="val-name">Inclusió</div>
+          <div class="val-desc">Tennis per a tothom, sense importar l'edat ni el nivell</div>
+        </div>
+        <div class="val-card">
+          <span class="val-icon">🏅</span>
+          <div class="val-name">Excel·lència</div>
+          <div class="val-desc">Entrenadors titulats i instal·lacions de primer nivell</div>
+        </div>
+        <div class="val-card">
+          <span class="val-icon">🤝</span>
+          <div class="val-name">Comunitat</div>
+          <div class="val-desc">Un club on el tennis és un vincle entre persones</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HORARI -->
+    <div>
+      <p class="sec-title">🕐 Horaris</p>
+      <div class="sched-wrap">
+        <div class="sched-row">
+          <span class="sched-day">Dl – Dv</span>
+          <span class="sched-time">08:00 – 22:00</span>
+          <span class="sched-badge">Obert</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">Dissabte</span>
+          <span class="sched-time">09:00 – 20:00</span>
+          <span class="sched-badge">Obert</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">Diumenge</span>
+          <span class="sched-time">09:00 – 18:00</span>
+          <span class="sched-badge">Obert</span>
+        </div>
+        <div class="sched-row">
+          <span class="sched-day">Festius</span>
+          <span class="sched-time">10:00 – 14:00</span>
+          <span class="sched-badge">Reduït</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NIVELL SOCIS -->
+  <div>
+    <p class="sec-title">📊 Distribució de socis per nivell</p>
+    <div class="prog-row" id="progRow">
+      <div class="prog-item">
+        <div class="prog-label"><span class="prog-name">Principiant</span><span class="prog-pct">38%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0" data-w="38%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-label"><span class="prog-name">Intermedi</span><span class="prog-pct">45%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0" data-w="45%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-label"><span class="prog-name">Avançat</span><span class="prog-pct">12%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0" data-w="12%"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-label"><span class="prog-name">Federat / Competició</span><span class="prog-pct">5%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0" data-w="5%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <a class="inf-cta" href="mailto:info@raketta.cat">
+    <div>
+      <div class="inf-cta-text">Vols fer-te soci? Contacta'ns</div>
+      <div class="inf-cta-sub">info@raketta.cat · +34 977 34 21 85</div>
+    </div>
+    <span class="inf-cta-arrow">→</span>
+  </a>
+
+</div><!-- /inf-body -->
+
+<script>
+  /* Serveis – toggle expand */
+  function toggleServ(el) {
+    const wasOpen = el.classList.contains('open');
+    document.querySelectorAll('.serv-card').forEach(c => c.classList.remove('open'));
+    if (!wasOpen) el.classList.add('open');
+  }
+
+  /* Flow steps */
+  const flowTexts = [
+    { icon: '📞', text: 'Truca\'ns al +34 977 34 21 85 o escriu a info@raketta.cat. Et respondrem en menys de 24 hores.' },
+    { icon: '🎾', text: 'Vine a provar el club sense cap compromís. T\'assignarem un entrenador i veurem el teu nivell de joc.' },
+    { icon: '📋', text: 'Tria entre el pla Bàsic (lloguer de pistes), Estàndard (+ classes en grup) o Premium (+ classes individuals).' },
+    { icon: '✅', text: 'Omple el formulari d\'alta en línia o a recepció. En 24 hores tindràs accés complet al club.' },
+    { icon: '🏆', text: 'Reserva la teva primera pista des de l\'app o la web. Benvingut/da a la família Raketta!' },
+  ];
+  const steps = document.querySelectorAll('.flow-step');
+  function setFlow(el, i) {
+    steps.forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    const t = flowTexts[i];
+    document.getElementById('flowTip').innerHTML =
+      `<span class="tip-icon">${t.icon}</span><span>${t.text}</span>`;
+  }
+
+  /* Progress bars – animate on load */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.prog-fill').forEach(bar => {
+        bar.style.width = bar.dataset.w;
+      });
+    }, 400);
+  });
+</script>
+</body>
+</html>
